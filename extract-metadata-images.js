@@ -1,3 +1,4 @@
+//Import modules
 import exifr from 'exifr';
 import fs from 'fs';
 import mysql from 'mysql2/promise';
