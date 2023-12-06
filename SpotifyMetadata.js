@@ -1,6 +1,5 @@
 import axios from 'axios';
 import mysql from 'mysql2/promise';
-import { Audio } from './audioModel'; // Adjust the path based on your file structure
 
 const clientId = '5a2b306007e240398bbc29e30be37c76';
 const clientSecret = '45500ceec49548a286fec89ccc7a2568';
@@ -15,7 +14,21 @@ const pool = mysql.createPool({
 });
 
 async function getAccessToken() {
-  // ... (unchanged)
+  const response = await axios.post(
+    'https://accounts.spotify.com/api/token',
+    'grant_type=client_credentials',
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      auth: {
+        username: clientId,
+        password: clientSecret,
+      },
+    }
+  );
+
+  return response.data.access_token;
 }
 
 async function getTrackInfo(trackId, accessToken) {
@@ -27,13 +40,11 @@ async function getTrackInfo(trackId, accessToken) {
     });
 
     const trackInfo = response.data;
-
-    // Create an instance of the Audio model
-    const audioInstance = new Audio(trackInfo.id, JSON.stringify(trackInfo));
+    console.log(`Track Information for ${trackId}:`, trackInfo);
 
     // Insert into Audio table
     const connection = await pool.getConnection();
-    const [audioRows] = await connection.execute('INSERT INTO Audio (audioName, audioDescription) VALUES (?, ?)', [audioInstance.audioName, audioInstance.audioDescription]);
+    const [audioRows] = await connection.execute('INSERT INTO Audio (audioName, audioDescription) VALUES (?, ?)', [trackInfo.id, JSON.stringify(trackInfo)]);
     connection.release();
 
     console.log(`Track information for ${trackId} stored in the Audio table.`);
@@ -45,12 +56,11 @@ async function getTrackInfo(trackId, accessToken) {
 async function processTracks() {
   const accessToken = await getAccessToken();
 
-  const trackIds = [
-    'pQq9eP5OFhw',
-    'tNxUxm3-658',
-    'gir8BEqAutk',
-    // Add other track IDs as needed
-  ];
+const trackIds = [
+  '1hR8BSuEqPCCZfv93zzzz9', // Replace with the correct track ID
+  // Add other valid track IDs as needed
+];
+
 
   for (const trackId of trackIds) {
     await getTrackInfo(trackId, accessToken);
