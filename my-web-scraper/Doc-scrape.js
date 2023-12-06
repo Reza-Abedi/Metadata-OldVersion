@@ -43,5 +43,5 @@ async function saveToDatabase(metadata) {
   await connection.end();
 }
 
-// Replace 'your_database_host', 'your_database_user', 'your_database_password', and 'your_database_name' with your actual database credentials
-scrapeWebsite('https://thegoodocs.com/all-templates/popular/');
+
+scrapeWebsite('https://www.google.se/books/edition/Scalable_Data_Streaming_with_Amazon_Kine/GekmEAAAQBAJ?hl=sv&gbpv=1');
