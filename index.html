@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Engine</title>
+</head>
+<body>
+
+  <h1>Search Engine</h1>
+
+  <form id="searchForm">
+    <label for="searchQuery">Enter your search query:</label>
+    <input type="text" id="searchQuery" name="q" required>
+    <button type="submit">Search</button>
+  </form>
+
+  <div id="searchResults"></div>
+
+  <script>
+    document.getElementById('searchForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const searchQuery = document.getElementById('searchQuery').value;
+
+      fetch(`/search?q=${encodeURIComponent(searchQuery)}`)
+        .then(response => response.json())
+        .then(results => {
+          const resultsContainer = document.getElementById('searchResults');
+          resultsContainer.innerHTML = '';
+
+          if (results.length === 0) {
+            resultsContainer.innerHTML = '<p>No results found.</p>';
+          } else {
+            results.forEach(result => {
+              resultsContainer.innerHTML += `<p>${result.audioName}: ${result.audioDescription}</p>`;
+            });
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+  </script>
+
+</body>
+</html>
