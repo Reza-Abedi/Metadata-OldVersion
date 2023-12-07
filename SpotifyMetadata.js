@@ -42,25 +42,54 @@ async function getTrackInfo(trackId, accessToken) {
     const trackInfo = response.data;
     console.log(`Track Information for ${trackId}:`, trackInfo);
 
-    // Insert into Audio table
+    const albumInfo = trackInfo.album;
+    const artistInfo = trackInfo.artists[0]; // Assuming there is only one artist for simplicity
+
+    // Insert into Audio table with specific information
     const connection = await pool.getConnection();
-    const [audioRows] = await connection.execute('INSERT INTO Audio (audioName, audioDescription) VALUES (?, ?)', [trackInfo.id, JSON.stringify(trackInfo)]);
-    connection.release();
+    console.log('Connected to the database');
+
+    const [audioRows] = await connection.execute(
+      'INSERT INTO Audio (audioName, audioDescription) VALUES (?, ?)',
+      [
+        trackInfo.name,  // Use track name as audioName
+        JSON.stringify({
+          album: {
+            name: albumInfo.name,
+            release_date: albumInfo.release_date,
+            total_tracks: albumInfo.total_tracks,
+            spotify_url: albumInfo.external_urls.spotify,
+          },
+          artist: {
+            name: artistInfo.name,
+            spotify_url: artistInfo.external_urls.spotify,
+          },
+          track: {
+            name: trackInfo.name,
+            track_number: trackInfo.track_number,
+            duration_ms: trackInfo.duration_ms,
+            explicit: trackInfo.explicit,
+            popularity: trackInfo.popularity,
+            isrc: trackInfo.external_ids.isrc,
+            spotify_url: trackInfo.external_urls.spotify,
+          },
+        }),
+      ]
+    );
 
     console.log(`Track information for ${trackId} stored in the Audio table.`);
+    connection.release();
+    console.log('Connection released');
   } catch (error) {
     console.error(`Error fetching or storing track information for ${trackId}:`, error.response ? error.response.data : error.message);
   }
 }
 
+// Replace '1hR8BSuEqPCCZfv93zzzz9' with your actual track IDs
+const trackIds = ['1hR8BSuEqPCCZfv93zzzz9'];
+
 async function processTracks() {
   const accessToken = await getAccessToken();
-
-const trackIds = [
-  '1hR8BSuEqPCCZfv93zzzz9', // Replace with the correct track ID
-  // Add other valid track IDs as needed
-];
-
 
   for (const trackId of trackIds) {
     await getTrackInfo(trackId, accessToken);
