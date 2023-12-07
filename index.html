@@ -3,52 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Engine</title>
+  <title>Metadata Display</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <div class="container">
 
-    <h1>Search Engine</h1>
+    <h1>Metadata Display</h1>
 
     <form id="searchForm">
-      <label for="searchQuery">Enter your search query:</label>
-      <input type="text" id="searchQuery" name="q" required>
-      <button type="submit">Search</button>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tableSelect">Select Table:</label>
+          <select id="tableSelect" name="table">
+            <option value="Audio">Audio</option>
+            <!-- Add more options as needed -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="searchQuery">Enter your search query:</label>
+          <input type="text" id="searchQuery" name="q" required>
+        </div>
+        <button type="button" id="searchButton">Search</button>
+      </div>
     </form>
 
-    <div id="searchResults" class="results-container"></div>
+    <div id="metadataResults" class="results-container"></div>
 
   </div>
 
   <script>
-    document.getElementById('searchForm').addEventListener('submit', function (event) {
-      event.preventDefault();
+    // Fetch metadata from the server and display it on the page
+    fetch('/metadata')
+      .then(response => response.json())
+      .then(metadata => {
+        const resultsContainer = document.getElementById('metadataResults');
+        resultsContainer.innerHTML = '';
 
-      const searchQuery = document.getElementById('searchQuery').value;
-
-      fetch(`/search?q=${encodeURIComponent(searchQuery)}`)
-        .then(response => response.json())
-        .then(results => {
-          const resultsContainer = document.getElementById('searchResults');
-          resultsContainer.innerHTML = '';
-
-          if (results.length === 0) {
-            resultsContainer.innerHTML = '<p class="no-results">No results found.</p>';
-          } else {
-            results.forEach(result => {
-              resultsContainer.innerHTML += `
-                <div class="result-item">
-                  <h3>${result.audioName}</h3>
-                  <p>${result.audioDescription}</p>
-                </div>
-              `;
-            });
-          }
-        })
-        .catch(error => console.error('Error:', error));
-    });
+        if (metadata.length === 0) {
+          resultsContainer.innerHTML = '<p class="no-results">No metadata found.</p>';
+        } else {
+          metadata.forEach(item => {
+            resultsContainer.innerHTML += `
+              <div class="metadata-item">
+                <h3>${item.audioName}</h3>
+                <p>${item.audioDescription}</p>
+              </div>
+            `;
+          });
+        }
+      })
+      .catch(error => console.error('Error:', error));
   </script>
 
 </body>
