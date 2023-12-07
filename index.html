@@ -1,22 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Search Engine</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <h1>Search Engine</h1>
+  <div class="container">
 
-  <form id="searchForm">
-    <label for="searchQuery">Enter your search query:</label>
-    <input type="text" id="searchQuery" name="q" required>
-    <button type="submit">Search</button>
-  </form>
+    <h1>Search Engine</h1>
 
-  <div id="searchResults"></div>
+    <form id="searchForm">
+      <label for="searchQuery">Enter your search query:</label>
+      <input type="text" id="searchQuery" name="q" required>
+      <button type="submit">Search</button>
+    </form>
+
+    <div id="searchResults" class="results-container"></div>
+
+  </div>
 
   <script>
     document.getElementById('searchForm').addEventListener('submit', function (event) {
@@ -31,10 +35,15 @@
           resultsContainer.innerHTML = '';
 
           if (results.length === 0) {
-            resultsContainer.innerHTML = '<p>No results found.</p>';
+            resultsContainer.innerHTML = '<p class="no-results">No results found.</p>';
           } else {
             results.forEach(result => {
-              resultsContainer.innerHTML += `<p>${result.audioName}: ${result.audioDescription}</p>`;
+              resultsContainer.innerHTML += `
+                <div class="result-item">
+                  <h3>${result.audioName}</h3>
+                  <p>${result.audioDescription}</p>
+                </div>
+              `;
             });
           }
         })
