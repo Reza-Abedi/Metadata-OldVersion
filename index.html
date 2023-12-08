@@ -12,6 +12,14 @@
 
     <h1>Metadata Display</h1>
 
+    <!-- Menu Options -->
+    <div class="menu">
+      <button onclick="loadTable('Audio')">Music</button>
+      <button onclick="loadTable('PDF')">PDF</button>
+      <button onclick="loadTable('PPT')">PPT</button>
+      <button onclick="loadTable('Image')">Image</button>
+    </div>
+
     <form id="searchForm">
       <div class="form-row">
         <div class="form-group">
@@ -25,7 +33,7 @@
           <label for="searchQuery">Enter your search query:</label>
           <input type="text" id="searchQuery" name="q" required>
         </div>
-        <button type="button" id="searchButton">Search</button>
+        <button type="button" id="searchButton" onclick="search()">Search</button>
       </div>
     </form>
 
@@ -34,27 +42,14 @@
   </div>
 
   <script>
-    // Fetch metadata from the server and display it on the page
-    fetch('/metadata')
-      .then(response => response.json())
-      .then(metadata => {
-        const resultsContainer = document.getElementById('metadataResults');
-        resultsContainer.innerHTML = '';
+    function loadTable(table) {
+      document.getElementById('tableSelect').value = table;
+      // You can add logic to fetch and display metadata for the selected table
+    }
 
-        if (metadata.length === 0) {
-          resultsContainer.innerHTML = '<p class="no-results">No metadata found.</p>';
-        } else {
-          metadata.forEach(item => {
-            resultsContainer.innerHTML += `
-              <div class="metadata-item">
-                <h3>${item.audioName}</h3>
-                <p>${item.audioDescription}</p>
-              </div>
-            `;
-          });
-        }
-      })
-      .catch(error => console.error('Error:', error));
+    function search() {
+      // Add your search logic here
+    }
   </script>
 
 </body>
