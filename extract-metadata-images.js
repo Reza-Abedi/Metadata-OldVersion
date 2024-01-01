@@ -4,11 +4,11 @@ import fs from 'fs';
 import mysql from 'mysql2/promise';
 
 const pool = mysql.createPool({
-  host: '161.97.144.27',
-  port: '8093',
-  user: 'root',
-  password: 'guessagain93',
-    database: 'MetaHub'
+  host: '...',
+  port: '',
+  user: '',
+  password: '',
+    database: ''
 });
 
 async function insertMetadata(image, metadata) {
