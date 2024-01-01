@@ -1,8 +1,8 @@
 import axios from 'axios';
 import mysql from 'mysql2/promise';
 
-const clientId = '5a2b306007e240398bbc29e30be37c76';
-const clientSecret = '45500ceec49548a286fec89ccc7a2568';
+const clientId = '';
+const clientSecret = ' ';
 
 // MySQL connection pool
 const pool = mysql.createPool({
