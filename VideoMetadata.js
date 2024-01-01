@@ -2,7 +2,7 @@ const axios = require('axios');
 const mysql = require('mysql2/promise');
 
 // Your YouTube Data API key
-const apiKey = 'AIzaSyASj1kyAFcuj9pGYWYVL3gZPE3btdEwKWU';
+const apiKey = '';
 
 // List of specific video IDs
 const videoIds = [
@@ -13,10 +13,10 @@ const videoIds = [
 
 // MySQL connection pool
 const pool = mysql.createPool({
-  host: '161.97.144.27',
-  port: '8093',
-  user: 'root',
-  password: 'guessagain93',
+  host: '..',
+  port: '',
+  user: '',
+  password: '',
   database: 'MetaHub'
 });
 
