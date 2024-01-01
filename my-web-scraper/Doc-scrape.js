@@ -26,11 +26,10 @@ async function scrapeWebsite(url) {
 
 async function saveToDatabase(metadata) {
   const connection = await mysql.createConnection({
-    host: '161.97.144.27',
-    port: '8093',
-    user: 'root',
-    password: 'guessagain93',
-    database: 'MetaHub'
+    host: '...',
+    user: '',
+    password: '',
+    database: ''
   });
 
   const [rows, fields] = await connection.execute(
